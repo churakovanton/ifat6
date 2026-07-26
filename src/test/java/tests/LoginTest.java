@@ -11,16 +11,14 @@ import static org.testng.Assert.*;
 
 public class LoginTest extends BaseTest {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginTest.class);
-
     @Test
     public void correct() {
 
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
-        String header = driver.findElement(By.xpath("//*[@data-test='title']")).getText();
 
-        assertEquals(header, "Products");
+        assertTrue(productPage.isOpen());
+        assertEquals(productPage.getTitle(), "Products");
     }
 
     @Test
@@ -29,11 +27,9 @@ public class LoginTest extends BaseTest {
         loginPage.open();
         loginPage.login("sdfsdf", "dfdsfsdf");
 
-        boolean displayed = driver.findElement(By.xpath("//button[@data-test='error-button']")).isDisplayed();
-        String errorText = driver.findElement(By.xpath("//h3[@data-test='error']")).getText();
-
-        assertTrue(displayed);
-        assertEquals(errorText, "Epic sadface: Username and password do not match any user in this service");
+        assertTrue(loginPage.isDisplayError());
+        assertEquals(loginPage.getTextError(),
+                "Epic sadface: Username and password do not match any user in this service");
     }
 
     @Test
@@ -42,11 +38,8 @@ public class LoginTest extends BaseTest {
         loginPage.open();
         loginPage.login("locked_out_user", "secret_sauce");
 
-        boolean displayed = driver.findElement(By.xpath("//button[@data-test='error-button']")).isDisplayed();
-        String errorText = driver.findElement(By.xpath("//h3[@data-test='error']")).getText();
-
-        assertTrue(displayed);
-        assertEquals(errorText, "Epic sadface: Sorry, this user has been locked out.");
+        assertTrue(loginPage.isDisplayError());
+        assertEquals(loginPage.getTextError(), "Epic sadface: Sorry, this user has been locked out.");
 
     }
 
@@ -57,11 +50,9 @@ public class LoginTest extends BaseTest {
                 "locked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_user",
                 "secret_sauce");
 
-        boolean displayed = driver.findElement(By.xpath("//button[@data-test='error-button']")).isDisplayed();
-        String errorText = driver.findElement(By.xpath("//h3[@data-test='error']")).getText();
-
-        assertTrue(displayed);
-        assertEquals(errorText, "Epic sadface: Username and password do not match any user in this service");
+        assertTrue(loginPage.isDisplayError());
+        assertEquals(loginPage.getTextError(),
+                "Epic sadface: Username and password do not match any user in this service");
     }
 
     @Test
@@ -71,10 +62,8 @@ public class LoginTest extends BaseTest {
                 "locked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_user",
                 "NULL");
 
-        boolean displayed = driver.findElement(By.xpath("//button[@data-test='error-button']")).isDisplayed();
-        String errorText = driver.findElement(By.xpath("//h3[@data-test='error']")).getText();
-
-        assertTrue(displayed);
-        assertEquals(errorText, "Epic sadface: Username and password do not match any user in this service");
+        assertTrue(loginPage.isDisplayError());
+        assertEquals(loginPage.getTextError(),
+                "Epic sadface: Username and password do not match any user in this service");
     }
 }
