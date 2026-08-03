@@ -5,65 +5,43 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import user.User;
 
 import static org.testng.Assert.*;
+import static user.UserFactory.withAdminPermission;
+import static user.UserFactory.withLockedAdminPermission;
 
 public class LoginTest extends BaseTest {
 
-    @Test
-    public void correct() {
-
+    @Test(description = "Проверка валидной авторизации", priority = 1)
+    public void validLogin() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login(withAdminPermission());
 
         assertTrue(productPage.isOpen());
-        assertEquals(productPage.getTitle(), "Products");
+        assertEquals(productPage.getTitle(), "Products",
+                "Name of the page doesn't correspond to the expected");
     }
 
-    @Test
-    public void incorret() {
-
-        loginPage.open();
-        loginPage.login("sdfsdf", "dfdsfsdf");
-
-        assertTrue(loginPage.isDisplayError());
-        assertEquals(loginPage.getTextError(),
-                "Epic sadface: Username and password do not match any user in this service");
+    @DataProvider
+    public Object[][] loginData() {
+        return new Object[][]{
+                {new User("Standard_user", "secret_sauce"),
+                        "Epic sadface: Username and password do not match any user in this service"},
+                {withLockedAdminPermission(),
+                        "Epic sadface: Sorry, this user has been locked out."},
+                {new User("", "secret_sauce"), "Epic sadface: Username is required"},
+                {new User("standard_user", ""), "Epic sadface: Password is required"}
+        };
     }
 
-    @Test
-    public void locked() {
-
+    @Test(priority = 2, invocationCount = 1, dataProvider = "loginData")
+    public void invalidLogin(User user, String errorMsg) {
         loginPage.open();
-        loginPage.login("locked_out_user", "secret_sauce");
-
+        loginPage.login(user);
         assertTrue(loginPage.isDisplayError());
-        assertEquals(loginPage.getTextError(), "Epic sadface: Sorry, this user has been locked out.");
-
-    }
-
-    @Test
-    public void extraLargeLogin() {
-        loginPage.open();
-        loginPage.login(
-                "locked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_user",
-                "secret_sauce");
-
-        assertTrue(loginPage.isDisplayError());
-        assertEquals(loginPage.getTextError(),
-                "Epic sadface: Username and password do not match any user in this service");
-    }
-
-    @Test
-    public void passwordIsNull() {
-        loginPage.open();
-        loginPage.login(
-                "locked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_userlocked_out_user",
-                "NULL");
-
-        assertTrue(loginPage.isDisplayError());
-        assertEquals(loginPage.getTextError(),
-                "Epic sadface: Username and password do not match any user in this service");
+        assertEquals(loginPage.getTextError(), errorMsg);
     }
 }
