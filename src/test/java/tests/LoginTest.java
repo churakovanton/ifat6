@@ -1,25 +1,30 @@
 package tests;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.qameta.allure.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import user.User;
+import utils.AllureUtils;
 
 import static org.testng.Assert.*;
 import static user.UserFactory.withAdminPermission;
 import static user.UserFactory.withLockedAdminPermission;
 
+@Epic("Интернет-магазин")
+@Feature("Авторизация")
+@Owner("Антон Чураков my@email.com")
 public class LoginTest extends BaseTest {
 
-    @Test(description = "Проверка валидной авторизации", priority = 1)
+    @Story("Удачная авторизация")
+    @Test(description = "Проверка корректной авторизации", priority = 1)
+    @Severity(SeverityLevel.BLOCKER)
+    @TmsLink("ifat6")
+    @Issue("ifat6")
     public void validLogin() {
         loginPage.open();
         loginPage.login(withAdminPermission());
 
+        AllureUtils.takeScreenshot(driver);
         assertTrue(productPage.isOpen());
         assertEquals(productPage.getTitle(), "Products",
                 "Name of the page doesn't correspond to the expected");
@@ -37,7 +42,11 @@ public class LoginTest extends BaseTest {
         };
     }
 
-    @Test(priority = 2, invocationCount = 1, dataProvider = "loginData")
+    @Story("Неудачная авторизация")
+    @Test(description = "Проверка некорректной авторизации", priority = 2, invocationCount = 1, dataProvider = "loginData")
+    @Severity(SeverityLevel.CRITICAL)
+    @TmsLink("ifat6")
+    @Issue("ifat6")
     public void invalidLogin(User user, String errorMsg) {
         loginPage.open();
         loginPage.login(user);
