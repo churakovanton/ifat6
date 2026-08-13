@@ -17,6 +17,8 @@
         <webdrivermanager.version>6.3.4</webdrivermanager.version>
         <allure-testng.version>2.29.1</allure-testng.version>
         <aspectjweaver.version>1.9.25.1</aspectjweaver.version>
+        <rest-assured.version>6.0.1</rest-assured.version>
+        <rest-assured-scheme.version>6.0.1</rest-assured-scheme.version>
     </properties>
 
     <dependencies>
@@ -48,6 +50,18 @@
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
             <version>${allure-testng.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>${rest-assured-scheme.version}</version>
         </dependency>
     </dependencies>
 
