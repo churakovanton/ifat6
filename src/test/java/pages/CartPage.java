@@ -9,6 +9,8 @@ import java.util.List;
 
 public class CartPage extends BasePage {
     final By inventoryItem = By.cssSelector(".inventory_item_name");
+    private final By checkoutBtn = By.cssSelector(DATA_TEST_PATTERN.formatted("checkout"));
+
     public CartPage(WebDriver driver) {
         super(driver);
     }
@@ -23,5 +25,10 @@ public class CartPage extends BasePage {
             names.add(productBlock.getText());
         }
         return names;
+    }
+
+    @Step("Переход к оформлению заказа")
+    public void clickCheckout() {
+        driver.findElement(checkoutBtn).click();
     }
 }
