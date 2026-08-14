@@ -49,6 +49,7 @@
             <artifactId>allure-testng</artifactId>
             <version>${allure-testng.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

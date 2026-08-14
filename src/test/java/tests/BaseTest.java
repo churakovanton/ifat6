@@ -8,9 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
-import pages.CartPage;
-import pages.LoginPage;
-import pages.ProductPage;
+import pages.*;
 import utils.TestListener;
 
 import java.time.Duration;
@@ -22,6 +20,9 @@ public class BaseTest {
     LoginPage loginPage;
     ProductPage productPage;
     CartPage cartPage;
+    BasketPage basketPage;
+    OverviewPage overviewPage;
+    CompletedPage completedPage;
 
     @Parameters({"browser"})
     @BeforeMethod
@@ -42,6 +43,9 @@ public class BaseTest {
         loginPage = new LoginPage(driver);
         productPage = new ProductPage(driver);
         cartPage = new CartPage(driver);
+        basketPage = new BasketPage(driver);
+        overviewPage = new OverviewPage(driver);
+        completedPage = new CompletedPage(driver);
     }
 
     @AfterMethod
